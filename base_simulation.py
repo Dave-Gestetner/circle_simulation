@@ -203,6 +203,7 @@ class BaseCircle:
         # info...
         self.number_of_collisions = 0  # total amount of collisions from inception till now
         self.distance_traveled = 0   # total distance travelled by this circle from inception till now
+        self.circle_time = 0
         # more info variables may follow
 
         # stores a list of all colliders and is updated on every sim-step. (useful as info and for clean_collisions)
@@ -225,6 +226,8 @@ Total Distance:       {self.distance_traveled}
         :param my_neighbors: all circles in the simulation environment (simbox) + the simbox's walls
         :return: None
         '''
+        # ensures constant time no matter simbox steps per frame
+        self.circle_time += 1 / self.sim_box.steps_per_frame
         # get all circles colliding with self
         self.current_colliders = self._is_colliding_with(neighbors=my_neighbors)
 
