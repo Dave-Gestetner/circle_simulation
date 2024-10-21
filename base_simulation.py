@@ -14,6 +14,33 @@ class BaseRenderer:
     def render_frame(self) -> Image:
         '''
         Responsible for drawing the circles onto the screen in their correct position and size
+        :return: PIl.Image
+        '''
+        # Initialize image
+        img = Image.new('RGB', size=(self.size, self.size))
+        # Initialize Draw object
+        draw = ImageDraw.Draw(img)
+
+        # draw Simbox Boundaries
+        self._draw_boundary(draw)
+
+        # For each circle in the simulation
+        sim_center = self.simbox.radius * self.resolution
+        for c in self.simbox.circles:
+            # create the bounding box which decides where and at what size the circle should be drawn
+            left, top, right, bottom = self._get_circle_bbox(c, sim_center)
+            # draws circle defined by bounding box with color specified by circle instance
+            self._draw_circle(left, top, right, bottom, c, draw)
+        return img
+
+    def _draw_boundary(self, draw):
+        # draw Simbox Boundaries
+        draw.ellipse([0, 0, self.size, self.size], outline=self.simbox.color, width=self.simbox.thickness)
+
+    def _get_circle_bbox(self, c, sim_center):
+        '''
+        finds position of given circle "c" in the image coordinate system.
+        Note:
         Position: In Simbox: position range is (-simbox.radius, +simbox.radius) on x and y.
                   In renderer: position ranges from 0 <-> self.size
 
@@ -25,32 +52,22 @@ class BaseRenderer:
 
         Notice the '+' in example 2. as stated earlier, renderer and Simbox systems
         interpret increasing Y differently.
-        :return: PIl.Image
+        :param c: circle
+        :param sim_center: pixel that corresponds to (0,0) in the simbox coord system
+        :return:
         '''
-        # Initialize image
-        img = Image.new('RGB', size=(self.size, self.size))
-        # Initialize Draw object
-        draw = ImageDraw.Draw(img)
+        left = sim_center + (c.position[0] - c.radius) * self.resolution
+        # subtract the y position from the center (-y = +y in the conversion between simbox and renderer).
+        top = sim_center - (c.position[1] + c.radius) * self.resolution
+        # move the entire size of the circle to the right
+        right = left + 2 * c.radius * self.resolution
+        # move the entire size of the circle to the bottom
+        bottom = top + 2 * c.radius * self.resolution
+        return left, top, right, bottom
 
-        # draw Simbox Boundaries
-        draw.ellipse([0,0, self.size, self.size], outline=self.simbox.color, width=self.simbox.thickness)
-
-        # For each circle in the simulation
-        sim_center = self.simbox.radius * self.resolution
-        for c in self.simbox.circles:
-            # create the bounding box which decides where and at what size the circle should be drawn
-
-            left = sim_center + (c.position[0] - c.radius) * self.resolution
-            # subtract the y position from the center (-y = +y in the conversion between simbox and renderer).
-            top = sim_center - (c.position[1] + c.radius) * self.resolution
-            # move the entire size of the circle to the right
-            right = left + 2 * c.radius * self.resolution
-            # move the entire size of the circle to the bottom
-            bottom = top + 2 * c.radius * self.resolution
-
-            # draws circle defined by bounding box with color specified by circle instance
-            draw.ellipse([left, top, right, bottom], fill=c.color)
-        return img
+    @staticmethod
+    def _draw_circle(left, top, right, bottom, circle, draw):
+        draw.ellipse([left, top, right, bottom], fill=circle.color)
 
     def _initialize(self):
         pass

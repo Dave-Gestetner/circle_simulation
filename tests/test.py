@@ -87,4 +87,4 @@ class Tests:
         SimDisplayer(simbox=self.basic_scene).run_live_sim()
 
 if __name__ == '__main__':
-    Tests().test_basic_video_ability()
+    Tests().test_display_ability()
