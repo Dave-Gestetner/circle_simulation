@@ -10,9 +10,11 @@ The package gives a wide degree of freedom to the user in modifying the existing
 ## Installation
 `pip install https://github.com/Dave-Gestetner/circle_simulation@main`
 
-or clone and set up by yourself
-
-`git clone https://github.com/Dave-Gestetner/circle_simulation.git`
+or clone and set up by yourself by following these steps.
+1. Navigate to the installation folder
+2. run `git clone https://github.com/Dave-Gestetner/circle_simulation.git`
+3. navigate to circle_simulation
+4. run `python setup.py install`
 
 then run **setup.py**
 
@@ -41,8 +43,8 @@ It can also be inherited to add more functionality to it. (see Examples.py inher
 
 ### Example
 ```
-from base_simulation import BaseSimbox, BaseCircle
-from renderers import SimDisplayer
+from circle_simulation.base_simulation import BaseSimbox, BaseCircle
+from circle_simulation.renderers import SimDisplayer
 
 particle = BaseCircle(color=(255, 155, 105), angle=3.142 / 3, speed=5)
 scene = BaseSimbox(radius=100, boundary_color=(90, 45, 35), boundary_thickness=3, steps_per_frame=1, amount=0)

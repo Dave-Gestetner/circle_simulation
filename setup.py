@@ -18,5 +18,6 @@ setup(
     python_requires='>=3.6',  # Minimum Python version requirement
     install_requires=[
         # Add any dependencies your package needs here
+        'numpy', 'pillow', 'pygame', 'opencv-python', 'keyboard'
     ],
 )
