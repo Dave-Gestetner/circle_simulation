@@ -182,13 +182,13 @@ class BaseCircle:
 
         # x, y component form of a vector for movement, can be given in vector or polar form
         if vector is not None:
-            self.vector = vector
+            self.vector = np.array(vector, dtype=float)
         else:
             # constructs vector from standard polar to vector form equation using params "angle" and "speed"
             self.vector = speed * np.array([np.cos(angle), np.sin(angle)])
 
         # vector form. stores current "final" position after every sim-step
-        self.position = position if position is not None else np.array([0., 0.])
+        self.position = np.array(position, dtype=float) if position is not None else np.array([0., 0.])
 
         # stores temporary position, direction and speed while in the midst of sim-step
         self.temp_position = np.array([0, 0])
