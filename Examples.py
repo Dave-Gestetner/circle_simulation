@@ -4,19 +4,33 @@ from renderers import SimDisplayer, SimExporter
 # Newtons Cradle
 def newtons_cradle():
     import numpy as np
-    sim = BaseSimbox(radius=100, boundary_color=(255, 255, 255), boundary_thickness=1, steps_per_frame=50,
-                                  amount=7,
-                                  positions=[[0, -90], [0, -20], [0, -10], [0, 0], [0, 10], [0, 20], [0, 90]],
-                                  sizes=[4, 4, 4, 4, 4, 4, 4],
-                                  speeds=[2, 0, 0, 0, 0, 0, 0, 0],
-                                  # NOTICE len(speeds) > amount,
-                                  # all iterable arguments are constrained by len(arg) >= amount
-                                  angles=[np.pi / 2, 0, 0, 0, 0, 0, 0],
-                                  vectors=None, # vectors defined through speeds and angles. (polar form)
-                                  weights=[1, 1, 1, 1, 1, 1, 1],
-                                  damping=[0.0 for i in range(7)], # Must Be 0
-                                  colors=[(60, 120, 250) for _ in range(7)])
-    SimDisplayer(sim).run_live_sim()
+    class ColorCircle(BaseCircle):
+        def __init__(self, simbox=None, name='',radius=5, weight=1, damping=0,
+                 color=(156, 156, 156), angle=0, speed=0, vector=None, position=None):
+            super().__init__(simbox, name,radius, weight, damping,
+                 color, angle, speed, vector, position)
+
+            self.initial_color = self.color
+        def update_movement_vector(self, my_neighbors):
+            super().update_movement_vector(my_neighbors)
+            if self.current_colliders:
+                self.color = (255, 125, 180)
+            else:
+                self.color = self.initial_color
+
+    c = [ColorCircle(radius=4, speed=2 if i == 0 else 0, position=None, angle=np.pi / 2, color=(125, 180, 255), damping=0) for i in range(7)]
+    positions = np.array([[0., -90.], [0., -20.], [0., -10.], [0., 0.], [0., 10.], [0., 20.], [0., 90.]])
+
+    for i in range(len(c)):
+        c[i].position = positions[i]
+
+    sim = BaseSimbox(radius=100, boundary_color=(255, 255, 255), boundary_thickness=10, steps_per_frame=1,
+                     amount=0)
+    for i in c:
+        sim.add_circle(i)
+
+    #SimDisplayer(sim).run_live_sim()
+    SimExporter("newtons_cradle", sim, seconds_to_run=15).run_sim()
 
 # Inheriting Renderer For Displaying Info
 def inherit_renderer():
@@ -69,7 +83,8 @@ def spiral_sim():
                      steps_per_frame=1,
                      amount=amount, positions=positions, sizes=sizes, angles=angles, speeds=speeds, vectors=None,
                      weights=weights, damping=damping, colors=colors)
-    SimDisplayer(simbox=sim).run_live_sim()
+    #SimDisplayer(simbox=sim).run_live_sim()
+    SimExporter(simbox=sim, name='spiral_001', seconds_to_run=10).run_sim()
 
 # inheriting SimBox to add circles every time there is a collision, and randomly remove some circles on each frame
 def inherit_simbox():
@@ -94,4 +109,4 @@ def inherit_simbox():
     SimDisplayer(simbox=sim).run_live_sim()
 
 if __name__ == '__main__':
-    inherit_simbox()
+    spiral_sim()

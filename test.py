@@ -25,21 +25,21 @@ class Tests:
 
     def test_stress_test(self):
         import random
-        amount = 500
+        amount = 200
         radius = 100
-        boundary_color = (255, 255, 255); boundary_thickness = 1
+        boundary_color = (255, 255, 255); boundary_thickness = 4
         positions = random_vectors_in_circle(amount, radius)
-        sizes = [2 for _ in range(amount)]
-        speeds = [1 for _ in range(amount)]
+        sizes = [random.randint(1,2) for _ in range(amount)]
+        speeds = [sizes[_] * 0.7 for _ in range(amount)]
         angles = [random.random() * 6.28 for _ in range(amount)]
-        weights = [1 for _ in range(amount)]
-        damping = [0.2 for _ in range(amount)]
-        colors = [(60, 120, 250) for _ in range(amount)]
+        weights = sizes.copy()
+        damping = [0.0 for _ in range(amount)]
+        colors = [(random.randint(200, 255), random.randint(150, 255), random.randint(45, 95)) for _ in range(amount)]
         sim = BaseSimbox(radius=radius, boundary_color=boundary_color, boundary_thickness=boundary_thickness, steps_per_frame=1,
                    amount=amount, positions=positions, sizes=sizes, angles=angles, speeds=speeds, vectors=None,
                    weights=weights, damping=damping, colors=colors)
-        #SimDisplayer(simbox=sim, resolution=5, fps=30).run_live_sim()
-        SimExporter("test_004", sim, seconds_to_run=4).run_sim()
+        SimDisplayer(simbox=sim, resolution=5, fps=30).run_live_sim()
+        #SimExporter("test_009", sim, seconds_to_run=5).run_sim()
 
     def test_steps_per_frame(self):
         self.basic_scene.steps_per_frame = 5 # test for 1, 5, 50, 5000
@@ -87,4 +87,4 @@ class Tests:
         SimDisplayer(simbox=self.basic_scene).run_live_sim()
 
 if __name__ == '__main__':
-    Tests().test_basic_video_ability()
+    Tests().test_stress_test()
