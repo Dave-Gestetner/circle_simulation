@@ -1,6 +1,6 @@
-from base_simulation import BaseSimbox, BaseCircle
-from renderers import SimDisplayer, SimExporter
-from extras import random_vectors_in_circle
+from circle_simulation.base_simulation import BaseSimbox, BaseCircle
+from circle_simulation.renderers import SimDisplayer, SimExporter
+from circle_simulation.extras import random_vectors_in_circle
 class Tests:
 
     def __init__(self):

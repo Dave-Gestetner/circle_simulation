@@ -2,4 +2,4 @@ __pycache__/
 *.pyc
 *.pyo
 .idea/*
-rd.py
+circle_simulation/rd.py
