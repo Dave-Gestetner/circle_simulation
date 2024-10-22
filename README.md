@@ -8,7 +8,7 @@ The package gives a wide degree of freedom to the user in modifying the existing
 ### Enjoy💣
 
 ## Installation
-`pip install https://github.com/Dave-Gestetner/circle_simulation@main`
+`pip install git+https://github.com/Dave-Gestetner/circle_simulation.git`
 
 or clone and set up by yourself by following these steps.
 1. Navigate to the installation folder
